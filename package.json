@@ -1,8 +1,8 @@
 {
-  "name": "mockjs",
-  "title": "Mock.js",
-  "description": "生成随机数据 & 拦截 Ajax 请求",
-  "version": "1.0.1-beta3",
+  "name": "mock2js",
+  "title": "Mock2.js",
+  "description": "生成随机数据 & 拦截 Ajax 请求, 增强版。",
+  "version": "1.0.1",
   "homepage": "http://mockjs.com/",
   "keywords": [
     "mock",
