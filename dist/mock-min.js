@@ -151,6 +151,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                };
 	                let result = handler(req, res);
 	                if(result){
+	                    if ('then' in result) {
+	                        return new Promise((resolve, reject) => {
+	                            result.then(data => {
+	                                resolve(Mock.mock(data))
+	                            }).catch(reject)
+	                        })
+	                    }
 	                    return Mock.mock(result)
 	                }
 	                return new Promise(resolve => {
