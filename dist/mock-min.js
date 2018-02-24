@@ -120,8 +120,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return Mock
 	}
 	
-	Mock.mockWithRules = function(rules){
+	Mock.mockWithRules = function(rules, options){
 	    if(!rules || typeof rules !== 'object')return;
+	    var baseUrl = '';
+	    if(options){
+	        baseUrl = options.baseUrl || '';
+	    }
+	
 	    Object.keys(rules).forEach(key=>{
 	        let method = 'GET';
 	        let url = key;
@@ -130,29 +135,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	            method = k[0];
 	            url = k[1];
 	        }
-	        Mock.mock(url, method.toLowerCase(), req => {
+	        Mock.mock(baseUrl + url, method.toLowerCase(), req => {
 	            let handler = rules[key];
 	            if(typeof handler === 'function'){
+	                let _callFn = null
 	                let res = {
-	                    _callFn: null,
 	                    send: function (data) {
 	                        setTimeout(()=>{
-	                            if(this._callFn)this._callFn(data)
+	                            if(_callFn)_callFn(Mock.mock(data))
 	                        }, 1)
 	                    },
 	                    onDone: function(fn){
-	                        this._callFn = fn
+	                        _callFn = fn
 	                    }
 	                };
 	                let result = handler(req, res);
 	                if(result){
-	                    return result
+	                    return Mock.mock(result)
 	                }
 	                return new Promise(resolve => {
 	                    res.onDone(resolve)
 	                })
 	            }else {
-	                return handler;
+	                return Mock.mock(handler);
 	            }
 	        })
 	    });
