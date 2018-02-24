@@ -288,16 +288,24 @@ Util.extend(MockXMLHttpRequest.prototype, {
             that.status = 200
             that.statusText = HTTP_STATUS_CODES[200]
 
-            // fix #92 #93 by @qddegtya
-            that.response = that.responseText = JSON.stringify(
-                convert(that.custom.template, that.custom.options),
-                null, 4
-            )
-
-            that.readyState = MockXMLHttpRequest.DONE
-            that.dispatchEvent(new Event('readystatechange' /*, false, false, that*/ ))
-            that.dispatchEvent(new Event('load' /*, false, false, that*/ ));
-            that.dispatchEvent(new Event('loadend' /*, false, false, that*/ ));
+            // 新增对 Promise 的支持
+            var dispatchDone = function (data) {
+                // fix #92 #93 by @qddegtya
+                that.response = that.responseText = JSON.stringify(
+                    data,
+                    null, 4
+                )
+                that.readyState = MockXMLHttpRequest.DONE
+                that.dispatchEvent(new Event('readystatechange' /*, false, false, that*/ ))
+                that.dispatchEvent(new Event('load' /*, false, false, that*/ ));
+                that.dispatchEvent(new Event('loadend' /*, false, false, that*/ ));
+            }
+            var templateData = convert(that.custom.template, that.custom.options)
+            if(Object.prototype.toString.call(templateData) === '[object Promise]'){
+                templateData.then(dispatchDone)
+            }else{
+                dispatchDone(templateData);
+            }
         }
     },
     // https://xhr.spec.whatwg.org/#the-abort()-method
