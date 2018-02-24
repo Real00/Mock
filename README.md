@@ -12,6 +12,59 @@ Mock.js is a simulation data generator to help the front-end to develop and prot
 
 The official site: <http://mockjs.com>
 
+## Demo
+
+mock.js
+```javascript
+import Mock from 'mock2js'
+
+const rules = {
+  // Support type as Object and Array
+  'GET /api/users': {users: [1, 2]},
+
+  '/api/users/1': {id: 1},
+  '/api/users/2': (req, res) => {
+    setTimeout(() => {
+      res.send({id: 2, name: 'jack'})
+    }, 3000)
+  },
+
+  'POST /api/users/create': () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve('ok 123')
+      }, 1000)
+    })
+  },
+};
+
+Mock.mockWithRules(rules);
+
+```
+main.js
+```javascript
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Vue from 'vue'
+import App from './App'
+import '../mock'
+
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  components: { App },
+  template: '<App/>'
+});
+
+```
+ajax:
+```javascript
+axios.get('/api/users/2').then(res=>{
+  console.log(res.data);
+})
+```
+
 ## Features
 
 * Generate simulated data according to the data template
