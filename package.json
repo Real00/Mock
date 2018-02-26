@@ -2,7 +2,7 @@
   "name": "mock2js",
   "title": "Mock2.js",
   "description": "生成随机数据 & 拦截 Ajax 请求, 增强版。",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "homepage": "http://mockjs.com/",
   "keywords": [
     "mock",
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/nuysoft/Mock.git"
+    "url": "git://github.com/wapznw/Mock.git"
   },
   "main": "./dist/mock.js",
   "scripts": {

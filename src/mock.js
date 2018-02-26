@@ -6,6 +6,10 @@ var RE = require('./mock/regexp')
 var toJSONSchema = require('./mock/schema')
 var valid = require('./mock/valid')
 
+if (typeof Promise === 'undefined') {
+    require('./mock/es6-promise').polyfill()
+}
+
 var XHR
 if (typeof window !== 'undefined') XHR = require('./mock/xhr')
 
@@ -29,7 +33,7 @@ var Mock = {
     _mocked: {}
 }
 
-Mock.version = '1.0.1-beta3'
+Mock.version = '1.0.5'
 
 // 避免循环依赖
 if (XHR) XHR.Mock = Mock
@@ -71,21 +75,21 @@ Mock.mockWithRules = function(rules, options){
         baseUrl = options.baseUrl || '';
     }
 
-    Object.keys(rules).forEach(key=>{
-        let method = 'GET';
-        let url = key;
+    Object.keys(rules).forEach(function(key){
+        var method = 'GET';
+        var url = key;
         if (key.indexOf(' ') !== -1) {
-            let k = key.split(' ');
+            var k = key.split(' ');
             method = k[0];
             url = k[1];
         }
-        Mock.mock(baseUrl + url, method.toLowerCase(), req => {
-            let handler = rules[key];
+        Mock.mock(baseUrl + url, method.toLowerCase(), function(req) {
+            var handler = rules[key];
             if(typeof handler === 'function'){
-                let _callFn = null
-                let res = {
+                var _callFn = null;
+                var res = {
                     send: function (data) {
-                        setTimeout(()=>{
+                        setTimeout(function(){
                             if(_callFn)_callFn(Mock.mock(data))
                         }, 1)
                     },
@@ -93,18 +97,18 @@ Mock.mockWithRules = function(rules, options){
                         _callFn = fn
                     }
                 };
-                let result = handler(req, res);
+                var result = handler(req, res);
                 if(result){
                     if ('then' in result) {
-                        return new Promise((resolve, reject) => {
-                            result.then(data => {
+                        return new Promise(function(resolve, reject){
+                            result.then(function (data) {
                                 resolve(Mock.mock(data))
                             }).catch(reject)
                         })
                     }
                     return Mock.mock(result)
                 }
-                return new Promise(resolve => {
+                return new Promise(function(resolve) {
                     res.onDone(resolve)
                 })
             }else {
