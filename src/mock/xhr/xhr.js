@@ -301,7 +301,7 @@ Util.extend(MockXMLHttpRequest.prototype, {
                 that.dispatchEvent(new Event('loadend' /*, false, false, that*/ ));
             }
             var templateData = convert(that.custom.template, that.custom.options)
-            if(Object.prototype.toString.call(templateData) === '[object Promise]'){
+            if('then' in templateData || Object.prototype.toString.call(templateData) === '[object Promise]'){
                 templateData.then(dispatchDone)
             }else{
                 dispatchDone(templateData);

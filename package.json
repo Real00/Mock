@@ -2,7 +2,7 @@
   "name": "mock2js",
   "title": "Mock2.js",
   "description": "生成随机数据 & 拦截 Ajax 请求, 增强版。",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "homepage": "http://mockjs.com/",
   "keywords": [
     "mock",

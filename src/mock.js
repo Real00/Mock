@@ -6,10 +6,6 @@ var RE = require('./mock/regexp')
 var toJSONSchema = require('./mock/schema')
 var valid = require('./mock/valid')
 
-if (typeof Promise === 'undefined') {
-    require('./mock/es6-promise').polyfill()
-}
-
 var XHR
 if (typeof window !== 'undefined') XHR = require('./mock/xhr')
 
@@ -33,7 +29,7 @@ var Mock = {
     _mocked: {}
 }
 
-Mock.version = '1.0.5'
+Mock.version = '1.0.6'
 
 // 避免循环依赖
 if (XHR) XHR.Mock = Mock
