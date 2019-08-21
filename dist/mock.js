@@ -8306,6 +8306,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// 是否拦截 Ajax 请求
 	MockXMLHttpRequest.prototype.match = false
+    MockXMLHttpRequest.prototype.upload = xhr.upload
 
 	// 初始化 Request 相关的属性和方法
 	Util.extend(MockXMLHttpRequest.prototype, {
